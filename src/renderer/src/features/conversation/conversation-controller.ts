@@ -356,7 +356,7 @@ export function createStableConversationState(
  * Created inside the keyed scope in `app-providers.tsx`, so a server switch
  * discards all of it by unmounting rather than by a list of setters.
  */
-export function createServerConversationState(releasePage = releaseFilePreviewPage) {
+export function createServerConversationState() {
   const [showComposerActions, setShowComposerActions] = createSignal(false);
   const [attachmentBusy, setAttachmentBusy] = createSignal(false);
   const [submitting, setSubmitting] = createSignal(false);
@@ -374,11 +374,11 @@ export function createServerConversationState(releasePage = releaseFilePreviewPa
   let previewPageUrl: string | undefined;
   const setSidebarFilePreview = (preview: SidebarFilePreview | null) => {
     const nextPageUrl = preview?.preview?.pageUrl;
-    if (previewPageUrl !== nextPageUrl) releasePage(previewPageUrl);
+    if (previewPageUrl !== nextPageUrl) releaseFilePreviewPage(previewPageUrl);
     previewPageUrl = nextPageUrl;
     writeSidebarFilePreview(preview);
   };
-  onCleanup(() => releasePage(previewPageUrl));
+  onCleanup(() => releaseFilePreviewPage(previewPageUrl));
   const [openReactionMessageId, setOpenReactionMessageId] = createSignal<string | null>(null);
   const [expandedEmojiMessageId, setExpandedEmojiMessageId] = createSignal<string | null>(null);
   const [copiedMessageId, setCopiedMessageId] = createSignal<string | null>(null);
