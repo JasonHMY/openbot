@@ -26,6 +26,7 @@ import {
   isConversationSnapshot,
   isConversationWithReadState,
   isFilePreviewKind,
+  isFilePreviewPageUrl,
   isQueuedMessageReceipt,
   isQueueSnapshot,
   type QueuedMessageReceipt,
@@ -49,7 +50,8 @@ export function decodeFilePreview(value: unknown): FilePreview {
     !isNumber(preview.size) ||
     !isString(preview.mimeType) ||
     !isFilePreviewKind(preview.previewKind) ||
-    (preview.bytes !== null && !(preview.bytes instanceof Uint8Array))
+    (preview.bytes !== null && !(preview.bytes instanceof Uint8Array)) ||
+    (preview.pageUrl !== undefined && !isFilePreviewPageUrl(preview.pageUrl))
   ) {
     throw new Error("Invalid file preview response.");
   }
@@ -59,6 +61,7 @@ export function decodeFilePreview(value: unknown): FilePreview {
     mimeType: preview.mimeType,
     previewKind: preview.previewKind,
     bytes: preview.bytes,
+    ...(preview.pageUrl === undefined ? {} : { pageUrl: preview.pageUrl }),
   };
 }
 

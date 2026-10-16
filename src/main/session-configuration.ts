@@ -20,6 +20,7 @@ import { runCauseEffect } from "../backend/effect-boundary";
 import type { MailboxStore } from "../backend/mailbox-store";
 import { attachmentCorsHeaders, attachmentDocumentHeaders, chatVisualResponse } from "./chat-visual-protocol";
 import { buildContentSecurityPolicy, readSelfHostedSignalOrigin } from "./content-security-policy";
+import { filePreviewPages } from "./file-preview-pages";
 import { fileResponse } from "./file-response";
 import type { RemoteServerManager } from "./remote-server-manager";
 import { canCheckRendererPermission, canRequestRendererPermission } from "./renderer-permissions";
@@ -118,6 +119,7 @@ export function configureAttachmentProtocol({ mailbox, agents, remoteServers }: 
   session.defaultSession.protocol.handle("openbot-visual", async (request) => {
     try {
       const url = new URL(request.url);
+      if (url.hostname === "preview") return filePreviewPages.response(request);
       const id = url.hostname === "file" ? url.pathname.split("/").filter(Boolean).at(-1) : undefined;
       const attachment = id ? await runCauseEffect(mailbox.resolveAttachment(id)) : null;
       if (!attachment || !isChatVisualMimeType(attachment.mimeType)) return new Response("Not found", { status: 404 });
