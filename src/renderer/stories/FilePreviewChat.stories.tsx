@@ -182,12 +182,7 @@ export const ChatWithOpenFile: Story = {
   args: { openFile: "RELEASE-NOTES.md" },
 };
 
-/** Before: the same workspace HTML link opens its source. */
-export const HtmlWorkspaceSource: Story = {
-  name: "Workspace HTML (source)",
-};
-
-/** After: the link opens a script-rendered page in the sidebar; the source toggle stays available. */
+/** The workspace HTML link opens a script-rendered page in the sidebar; the source toggle stays available. */
 export const HtmlWorkspacePage: Story = {
   name: "Workspace HTML (page)",
   render: (args) => {
